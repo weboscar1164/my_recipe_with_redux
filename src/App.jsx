@@ -1,10 +1,24 @@
-import { useState } from "react";
 import "./App.css";
+import Header from "./components/Header";
+import SearchBar from "./components/SearchBar";
+import Home from "./components/Home";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchCategorys } from "./store/modules/recipe";
 
 function App() {
-	const [count, setCount] = useState(0);
+	const dispatch = useDispatch();
 
-	return <></>;
+	useEffect(() => {
+		dispatch(fetchCategorys());
+	}, [dispatch]);
+	return (
+		<>
+			<Header />
+			<SearchBar />
+			<Home />
+		</>
+	);
 }
 
 export default App;
