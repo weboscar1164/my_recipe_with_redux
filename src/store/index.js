@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import categoryReducer from "./modules/recipe";
+import categoryReducer from "./modules/category";
 import serchWordReducer from "./modules/serchWord";
 
 export default configureStore({

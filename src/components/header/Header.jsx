@@ -1,9 +1,13 @@
 import React from "react";
+import NavSp from "./NavSp";
 
 const Header = () => {
 	return (
 		<>
-			<header>header</header>
+			<header>
+				<h2>My Recipeeeee!</h2>
+				<NavSp />
+			</header>
 		</>
 	);
 };
