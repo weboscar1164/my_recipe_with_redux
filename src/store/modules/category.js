@@ -1,9 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getApiData } from "../../api/api";
+import { isEmpty } from "../../utils/helpers";
 
 const category = createSlice({
 	name: "category",
-	initialState: { allCategory: {}, status: "", showCategory: {} },
+	initialState: {
+		allCategory: {},
+		status: "",
+		showCategory: {},
+		currentCategory: { rankingNumber: "" },
+	},
 	reducers: {
 		setShowCategory(state, action) {
 			console.log(action.payload);
@@ -36,6 +42,39 @@ const category = createSlice({
 				console.log(state.showCategory);
 			}
 		},
+		setCurrentCategory(state, action) {
+			console.log(action.payload);
+			if (!isEmpty(action.payload)) {
+				const category = action.payload.category;
+				const categoryType = action.payload.categoryType;
+				// 楽天ランキングAPIのURLに使用するカテゴリ番号を生成する
+				let rankingNumber;
+				if (categoryType === "large") {
+					rankingNumber = category.categoryId;
+				} else if (categoryType === "medium") {
+					const largeCategory = state.allCategory.large.find(
+						(_largeCategory) =>
+							category.parentCategoryId == _largeCategory.categoryId
+					);
+					rankingNumber = `${largeCategory.categoryId}-${category.categoryId}`;
+				} else if (categoryType === "small") {
+					const mediumCategory = state.allCategory.medium.find(
+						(_mediumCategory) =>
+							category.parentCategoryId == _mediumCategory.categoryId
+					);
+					const largeCategory = state.allCategory.large.find(
+						(_largeCategory) =>
+							mediumCategory.parentCategoryId == _largeCategory.categoryId
+					);
+					rankingNumber = `${largeCategory.categoryId}-${mediumCategory.categoryId}-${category.categoryId}`;
+				}
+
+				state.currentCategory = { ...category, rankingNumber: rankingNumber };
+			} else {
+				state.currentCategory = { rankingNumber: "" };
+			}
+			console.log(state.currentCategory);
+		},
 	},
 
 	extraReducers: (builder) => {
@@ -60,7 +99,7 @@ const fetchCategorys = createAsyncThunk("api/getApiData", async () => {
 	return response.result;
 });
 
-const { setShowCategory } = category.actions;
+const { setShowCategory, setCurrentCategory } = category.actions;
 
-export { fetchCategorys, setShowCategory };
+export { fetchCategorys, setShowCategory, setCurrentCategory };
 export default category.reducer;

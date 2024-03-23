@@ -1,19 +1,29 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setShowCategory } from "../../store/modules/category";
+import {
+	setShowCategory,
+	setCurrentCategory,
+} from "../../store/modules/category";
+import { clearSearchWord } from "../../store/modules/searchWord";
 import { isEmpty } from "../../utils/helpers";
 
 const CategoryList = () => {
-	const allCategory = useSelector((state) => state.category.allCategory);
 	const showCategory = useSelector((state) => state.category.showCategory);
-	const serchWord = useSelector((state) => state.serchWord.serchWord);
-	const status = useSelector((state) => state.category.status);
+	const searchWord = useSelector((state) => state.searchWord.searchWord);
+	const currentCategory = useSelector(
+		(state) => state.category.currentCategory
+	);
 
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(setShowCategory(serchWord));
-	}, [serchWord]);
+		dispatch(setShowCategory(searchWord));
+	}, [searchWord]);
+
+	const onCategoryClikHandler = (category, categoryType) => {
+		dispatch(setCurrentCategory({ category, categoryType }));
+		dispatch(clearSearchWord());
+	};
 
 	return (
 		<div>
@@ -23,7 +33,14 @@ const CategoryList = () => {
 				<ul>
 					{Object.keys(showCategory).map((categoryType) => {
 						return showCategory[categoryType].map((category) => {
-							return <li key={category.categoryId}>{category.categoryName}</li>;
+							return (
+								<li
+									key={category.categoryId}
+									onClick={() => onCategoryClikHandler(category, categoryType)}
+								>
+									{category.categoryName}
+								</li>
+							);
 						});
 					})}
 				</ul>

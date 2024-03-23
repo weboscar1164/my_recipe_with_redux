@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import categoryReducer from "./modules/category";
-import serchWordReducer from "./modules/serchWord";
+import searchWordReducer from "./modules/searchWord";
+import rankingReducer from "./modules/ranking";
 
 export default configureStore({
 	reducer: {
 		category: categoryReducer,
-		serchWord: serchWordReducer,
+		searchWord: searchWordReducer,
+		ranking: rankingReducer,
 	},
 });

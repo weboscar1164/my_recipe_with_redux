@@ -1,16 +1,19 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { addSerchWord } from "../store/modules/serchWord";
+import { useDispatch, useSelector } from "react-redux";
+import { addSearchWord } from "../store/modules/searchWord";
+import { setCurrentCategory } from "../store/modules/category";
 
 const SearchBar = () => {
 	const dispatch = useDispatch();
 	const handleInputChange = (e) => {
-		dispatch(addSerchWord(e.target.value));
+		dispatch(addSearchWord(e.target.value));
+		dispatch(setCurrentCategory({}));
 	};
+	const searchWord = useSelector((state) => state.searchWord.searchWord);
 
 	return (
 		<>
-			<input type="text" onChange={handleInputChange} />
+			<input type="text" onChange={handleInputChange} value={searchWord} />
 		</>
 	);
 };
