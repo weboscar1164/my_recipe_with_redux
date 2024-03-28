@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.css";
 import Header from "./components/header/Header";
-import SearchBar from "./components/SearchBar";
 import Home from "./components/home/Home";
 import Likes from "./components/likes/Likes";
 import LogIn from "./components/auth/Login";
@@ -22,7 +21,6 @@ function App() {
 		<>
 			<Router>
 				<Header />
-				<SearchBar />
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/likes" element={<Likes />} />

@@ -4,12 +4,12 @@ import {
 	setShowCategory,
 	setCurrentCategory,
 } from "../../store/modules/category";
-import { clearSearchWord } from "../../store/modules/searchWord";
+import { clearSearchWord } from "../../store/modules/formData";
 import { isEmpty } from "../../utils/helpers";
 
 const CategoryList = () => {
 	const showCategory = useSelector((state) => state.category.showCategory);
-	const searchWord = useSelector((state) => state.searchWord.searchWord);
+	const searchWord = useSelector((state) => state.formData.searchWord);
 	const currentCategory = useSelector(
 		(state) => state.category.currentCategory
 	);

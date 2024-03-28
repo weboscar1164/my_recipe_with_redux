@@ -2,13 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
-	apiKey: "AIzaSyCMwuqw17-0a-rn4vu0a38C0Nx67-ppEM0",
-	authDomain: "my-recipeeee.firebaseapp.com",
-	projectId: "my-recipeeee",
-	storageBucket: "my-recipeeee.appspot.com",
-	messagingSenderId: "215708331886",
-	appId: "1:215708331886:web:1a26840fba20d5f3425b7f",
-	measurementId: "G-W9ZGC35E79",
+	apiKey: "AIzaSyB2JZyGVxK9JioHkU5q7Ym011kJRVL1A4A",
+	authDomain: "my-recipeee-with-redux.firebaseapp.com",
+	projectId: "my-recipeee-with-redux",
+	storageBucket: "my-recipeee-with-redux.appspot.com",
+	messagingSenderId: "559144070538",
+	appId: "1:559144070538:web:634163c1641e616df2ec73",
+	measurementId: "G-SWPFZH36SW",
 };
 
 // Initialize Firebase

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchRanking } from "../store/modules/ranking";
-import { clearSearchWord } from "../store/modules/searchWord";
+import { clearSearchWord } from "../store/modules/formData";
 import { isEmpty } from "../utils/helpers";
 
 const RankingList = () => {
