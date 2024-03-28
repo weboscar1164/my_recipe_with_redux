@@ -18,7 +18,11 @@ const ranking = createSlice({
 		status: "",
 		rankingList: {},
 	},
-	reducers: {},
+	reducers: {
+		clearRankingList(state) {
+			state.rankingList = {};
+		},
+	},
 
 	extraReducers: (builder) => {
 		builder.addCase(fetchRanking.pending, (state) => {
@@ -35,7 +39,7 @@ const ranking = createSlice({
 	},
 });
 
-// const { setShowCategory, setCurrentCategory } = category.actions;
+const { clearRankingList } = ranking.actions;
 
-export { fetchRanking };
+export { fetchRanking, clearRankingList };
 export default ranking.reducer;

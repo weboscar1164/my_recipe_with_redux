@@ -75,6 +75,9 @@ const category = createSlice({
 			}
 			console.log(state.currentCategory);
 		},
+		clearCurrentCategory(state) {
+			state.currentCategory = { rankingNumber: "" };
+		},
 	},
 
 	extraReducers: (builder) => {
@@ -99,7 +102,13 @@ const fetchCategorys = createAsyncThunk("api/getApiData", async () => {
 	return response.result;
 });
 
-const { setShowCategory, setCurrentCategory } = category.actions;
+const { setShowCategory, setCurrentCategory, clearCurrentCategory } =
+	category.actions;
 
-export { fetchCategorys, setShowCategory, setCurrentCategory };
+export {
+	fetchCategorys,
+	setShowCategory,
+	setCurrentCategory,
+	clearCurrentCategory,
+};
 export default category.reducer;
