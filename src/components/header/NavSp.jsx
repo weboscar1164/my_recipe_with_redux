@@ -1,17 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { auth } from "../../firebase.config";
 
 const NavSp = () => {
-	const user = useSelector((state) => state.user.user);
-	console.log(user);
+	const isAuth = useSelector((state) => state.user.currentUser);
 	return (
 		<nav>
 			<Link to={"/"}>ホーム</Link>
 
 			<Link to={"/likes"}>お気に入り</Link>
-			{!user ? (
+			{!isAuth ? (
 				<>
 					<Link to={"/login"}>ログイン</Link>
 

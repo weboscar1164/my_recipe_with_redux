@@ -7,12 +7,25 @@ import Likes from "./components/likes/Likes";
 import LogIn from "./components/auth/Login";
 import LogOut from "./components/auth/LogOut";
 import SignUp from "./components/auth/SignUp";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchCategorys } from "./store/modules/category";
+import { logIn, logOut } from "./store/modules/user";
 
 function App() {
 	const dispatch = useDispatch();
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+	useEffect(() => {
+		const isAuth = localStorage.getItem("isAuth");
+		if (!isAuth) {
+			dispatch(logOut());
+			setIsLoggedIn(false);
+		} else {
+			dispatch(logIn(isAuth));
+			setIsLoggedIn(true);
+		}
+	}, [dispatch]);
 
 	useEffect(() => {
 		dispatch(fetchCategorys());
@@ -22,11 +35,19 @@ function App() {
 			<Router>
 				<Header />
 				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route path="/likes" element={<Likes />} />
-					<Route path="/signup" element={<SignUp />} />
-					<Route path="/login" element={<LogIn />} />
-					<Route path="/logout" element={<LogOut />} />
+					{isLoggedIn ? (
+						<>
+							<Route path="/" element={<Home />} />
+							<Route path="/likes" element={<Likes />} />
+							<Route path="/logout" element={<LogOut />} />
+						</>
+					) : (
+						<>
+							<Route path="/" element={<Home />} />
+							<Route path="/signup" element={<SignUp />} />
+							<Route path="/login" element={<LogIn />} />
+						</>
+					)}
 				</Routes>
 			</Router>
 		</>

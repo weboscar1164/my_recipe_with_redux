@@ -1,33 +1,23 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { auth } from "../../firebase.config";
-const user = createSlice({
+const userSlice = createSlice({
 	name: "auth",
 	initialState: {
-		user: null,
+		currentUser: null,
 	},
 	reducers: {
 		logIn(state, { payload }) {
-			state.user = payload;
+			state.currentUser = payload;
+			localStorage.setItem("isAuth", payload);
 		},
 		logOut(state, { payload }) {
-			state.user = null;
+			state.currentUser = null;
+			localStorage.removeItem("isAuth");
 		},
 	},
-
-	// extraReducers: (builder) => {
-	// 	builder.addCase(fetchCategorys.pending, (state) => {
-	// 		state.status = "Loading";
-	// 	});
-	// 	builder.addCase(fetchCategorys.fulfilled, (state, action) => {
-	// 		state.status = "Loaded";
-	// 		// state.allCategory = action.payload;
-	// 	});
-	// 	builder.addCase(fetchCategorys.rejected, (state) => {
-	// 		state.status = "error";
-	// 	});
-	// },
 });
 
+//あとでcomponentから移す
 const userSignUp = createAsyncThunk(
 	"firebase/signUp",
 	async (email, password) => {
@@ -54,7 +44,7 @@ const userCredential = createAsyncThunk(
 	}
 );
 
-const { logIn, logOut } = user.actions;
+const { logIn, logOut } = userSlice.actions;
 
-export { userCredential, logIn, logOut };
-export default user.reducer;
+export { logIn, logOut };
+export default userSlice.reducer;

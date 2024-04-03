@@ -1,20 +1,21 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import { getApiData } from "../../api/api";
 import { isEmpty } from "../../utils/helpers";
 
-const category = createSlice({
+const categorySlice = createSlice({
 	name: "category",
 	initialState: {
 		allCategory: {},
 		status: "",
-		showCategory: {},
+		showCategoryList: {},
 		currentCategory: { rankingNumber: "" },
+		showAndLikeCategoryList: {},
 	},
 	reducers: {
-		setShowCategory(state, action) {
-			console.log(action.payload);
+		setShowCategoryList(state, action) {
+			// console.log(action.payload);
 			if (!action.payload) {
-				state.showCategory = {};
+				state.showCategoryList = {};
 			} else {
 				const resultCategory = Object.keys(state.allCategory).reduce(
 					(result, categoryType) => {
@@ -38,12 +39,12 @@ const category = createSlice({
 					},
 					{}
 				);
-				state.showCategory = resultCategory;
-				console.log(state.showCategory);
+				state.showCategoryList = resultCategory;
+				// console.log(state.showCategoryList);
 			}
 		},
 		setCurrentCategory(state, action) {
-			console.log(action.payload);
+			// console.log(action.payload);
 			if (!isEmpty(action.payload)) {
 				const category = action.payload.category;
 				const categoryType = action.payload.categoryType;
@@ -73,10 +74,38 @@ const category = createSlice({
 			} else {
 				state.currentCategory = { rankingNumber: "" };
 			}
-			console.log(state.currentCategory);
+			// console.log(state.currentCategory);
 		},
 		clearCurrentCategory(state) {
 			state.currentCategory = { rankingNumber: "" };
+		},
+
+		conbineCategoryLists(state, action) {
+			console.log(action.payload);
+			const targetList = action.payload.showCategoryList;
+			const conbineList = action.payload.categoryLikeList;
+			const getIsCategoryLike = (category, categoryType, conbineList) => {
+				const foundObject = conbineList.find(
+					(obj) =>
+						obj.categoryId === category.categoryId &&
+						obj.categoryType === categoryType
+				);
+				if (foundObject !== undefined) {
+					return foundObject.id;
+				} else {
+					return null;
+				}
+			};
+
+			Object.keys(targetList).forEach((categoryType) => {
+				state.showAndLikeCategoryList[categoryType] = targetList[
+					categoryType
+				].map((category) => ({
+					...category,
+					firebaseId: getIsCategoryLike(category, categoryType, conbineList),
+				}));
+			});
+			console.log(current(state.showAndLikeCategoryList));
 		},
 	},
 
@@ -102,13 +131,18 @@ const fetchCategorys = createAsyncThunk("api/getApiData", async () => {
 	return response.result;
 });
 
-const { setShowCategory, setCurrentCategory, clearCurrentCategory } =
-	category.actions;
+const {
+	setShowCategoryList,
+	setCurrentCategory,
+	clearCurrentCategory,
+	conbineCategoryLists,
+} = categorySlice.actions;
 
 export {
 	fetchCategorys,
-	setShowCategory,
+	setShowCategoryList,
 	setCurrentCategory,
 	clearCurrentCategory,
+	conbineCategoryLists,
 };
-export default category.reducer;
+export default categorySlice.reducer;

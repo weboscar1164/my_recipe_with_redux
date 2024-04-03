@@ -12,7 +12,7 @@ const fetchRanking = createAsyncThunk(
 		return response.result;
 	}
 );
-const ranking = createSlice({
+const rankingSlice = createSlice({
 	name: "ranking",
 	initialState: {
 		status: "",
@@ -39,7 +39,7 @@ const ranking = createSlice({
 	},
 });
 
-const { clearRankingList } = ranking.actions;
+const { clearRankingList } = rankingSlice.actions;
 
 export { fetchRanking, clearRankingList };
-export default ranking.reducer;
+export default rankingSlice.reducer;
