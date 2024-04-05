@@ -18,7 +18,11 @@ const likeSlice = createSlice({
 		categoryLikeList: [],
 		status: "idle",
 	},
-	reducers: {},
+	reducers: {
+		clearLikeList(state) {
+			state.categoryLikeList = [];
+		},
+	},
 	extraReducers: (builder) => {
 		//getCategoryLikeList
 		builder.addCase(getCategoryLikeList.fulfilled, (state, action) => {
@@ -129,6 +133,13 @@ const removeCategoryLike = createAsyncThunk(
 	}
 );
 
-export { getCategoryLikeList, addCategoryLike, removeCategoryLike };
+const { clearLikeList } = likeSlice.actions;
+
+export {
+	clearLikeList,
+	getCategoryLikeList,
+	addCategoryLike,
+	removeCategoryLike,
+};
 
 export default likeSlice.reducer;

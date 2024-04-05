@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase.config";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../store/modules/user";
+import { clearLikeList } from "../../store/modules/like";
 
 const LogOut = () => {
 	const navigate = useNavigate();
@@ -19,8 +20,8 @@ const LogOut = () => {
 		e.preventDefault();
 		try {
 			await auth.signOut();
-			localStorage.setItem("isAuth", false);
 			dispatch(logOut());
+			dispatch(clearLikeList());
 			navigate("/");
 		} catch (error) {
 			console.log(error);

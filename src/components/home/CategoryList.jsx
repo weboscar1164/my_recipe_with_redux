@@ -8,6 +8,7 @@ import {
 import { clearSearchWord } from "../../store/modules/formData";
 import { isEmpty } from "../../utils/helpers";
 import { addCategoryLike, removeCategoryLike } from "../../store/modules/like";
+import { handleOpenModal } from "../../store/modules/modal";
 
 const CategoryList = () => {
 	const showCategoryList = useSelector(
@@ -46,12 +47,15 @@ const CategoryList = () => {
 	};
 
 	const onLikeClickHandler = (category, categoryType, currentUser) => {
+		if (!currentUser) {
+			dispatch(handleOpenModal());
+			return;
+		}
 		if (category.firebaseId) {
 			dispatch(removeCategoryLike(category));
 		} else {
 			dispatch(addCategoryLike({ category, categoryType, currentUser }));
 		}
-		console.log("clicked:", categoryLikeList);
 	};
 
 	return (

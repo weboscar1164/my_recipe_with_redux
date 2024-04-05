@@ -9,15 +9,16 @@ const NavSp = () => {
 		<nav>
 			<Link to={"/"}>ホーム</Link>
 
-			<Link to={"/likes"}>お気に入り</Link>
 			{!isAuth ? (
 				<>
 					<Link to={"/login"}>ログイン</Link>
-
 					<Link to={"/signup"}>ユーザー登録</Link>
 				</>
 			) : (
-				<Link to={"/logout"}>ログアウト</Link>
+				<>
+					<Link to={"/likes"}>お気に入り</Link>
+					<Link to={"/logout"}>ログアウト</Link>
+				</>
 			)}
 		</nav>
 	);
