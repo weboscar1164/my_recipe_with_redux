@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Modal from "react-modal";
 
 import "./App.css";
 import Header from "./components/header/Header";
@@ -18,6 +19,8 @@ function App() {
 	// const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const currentUser = useSelector((state) => state.user.CurrentUser);
+
+	Modal.setAppElement("#root");
 
 	useEffect(() => {
 		const isAuth = localStorage.getItem("isAuth");
