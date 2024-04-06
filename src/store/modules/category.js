@@ -8,10 +8,12 @@ const categorySlice = createSlice({
 		allCategory: {},
 		status: "",
 		showCategoryList: {},
+		showAndLikeCategoryList: {},
 		currentCategory: { rankingNumber: "" },
 		showAndLikeCategoryList: {},
 	},
 	reducers: {
+		// CategoryList
 		setShowCategoryList(state, action) {
 			// console.log(action.payload);
 			if (!action.payload) {
@@ -43,6 +45,72 @@ const categorySlice = createSlice({
 				// console.log(state.showCategoryList);
 			}
 		},
+
+		conbineCategoryLists(state, action) {
+			console.log(action.payload);
+			const targetList = action.payload.showCategoryList;
+			const conbineList = action.payload.categoryLikeList;
+			const getIsCategoryLike = (category, categoryType, conbineList) => {
+				const foundObject = conbineList.find(
+					(obj) =>
+						obj.categoryId === category.categoryId &&
+						obj.categoryType === categoryType
+				);
+				if (foundObject !== undefined) {
+					return foundObject.id;
+				} else {
+					return null;
+				}
+			};
+
+			Object.keys(targetList).forEach((categoryType) => {
+				state.showAndLikeCategoryList[categoryType] = targetList[
+					categoryType
+				].map((category) => ({
+					...category,
+					firebaseId: getIsCategoryLike(category, categoryType, conbineList),
+				}));
+			});
+			console.log(current(state.showAndLikeCategoryList));
+		},
+
+		clearShowCategoryList(state) {
+			state.showCategoryList = {};
+		},
+
+		// LikeCategoryList
+		setShowAndLikeCategoryList(state, action) {
+			// allCategoryからfirebaseのlikelistを用いて一致するカテゴリを抽出
+			console.log("setShowAndLikeCategoryList.action:", action.payload);
+			const likedCategoryList = {};
+			Object.keys(state.allCategory).forEach((categoryType) => {
+				likedCategoryList[categoryType] = state.allCategory[categoryType]
+					.filter((category) => {
+						return action.payload.some((item) => {
+							return (
+								categoryType === item.categoryType &&
+								category.categoryId === item.categoryId
+							);
+						});
+					})
+					.map((category) => {
+						// 一致するcategoryにfirebase上のIdを付与
+						const matchingItem = action.payload.find((item) => {
+							return (
+								categoryType === item.categoryType &&
+								category.categoryId === item.categoryId
+							);
+						});
+						return {
+							...category,
+							firebaseId: matchingItem ? matchingItem.id : null,
+						};
+					});
+			});
+			state.showAndLikeCategoryList = likedCategoryList;
+		},
+
+		// CategoryList, LikeCategoryList共通
 		setCurrentCategory(state, action) {
 			// console.log(action.payload);
 			if (!isEmpty(action.payload)) {
@@ -76,36 +144,9 @@ const categorySlice = createSlice({
 			}
 			// console.log(state.currentCategory);
 		},
+
 		clearCurrentCategory(state) {
 			state.currentCategory = { rankingNumber: "" };
-		},
-
-		conbineCategoryLists(state, action) {
-			console.log(action.payload);
-			const targetList = action.payload.showCategoryList;
-			const conbineList = action.payload.categoryLikeList;
-			const getIsCategoryLike = (category, categoryType, conbineList) => {
-				const foundObject = conbineList.find(
-					(obj) =>
-						obj.categoryId === category.categoryId &&
-						obj.categoryType === categoryType
-				);
-				if (foundObject !== undefined) {
-					return foundObject.id;
-				} else {
-					return null;
-				}
-			};
-
-			Object.keys(targetList).forEach((categoryType) => {
-				state.showAndLikeCategoryList[categoryType] = targetList[
-					categoryType
-				].map((category) => ({
-					...category,
-					firebaseId: getIsCategoryLike(category, categoryType, conbineList),
-				}));
-			});
-			console.log(current(state.showAndLikeCategoryList));
 		},
 	},
 
@@ -133,16 +174,20 @@ const fetchCategorys = createAsyncThunk("api/getApiData", async () => {
 
 const {
 	setShowCategoryList,
+	clearShowCategoryList,
 	setCurrentCategory,
 	clearCurrentCategory,
 	conbineCategoryLists,
+	setShowAndLikeCategoryList,
 } = categorySlice.actions;
 
 export {
 	fetchCategorys,
 	setShowCategoryList,
+	clearShowCategoryList,
 	setCurrentCategory,
 	clearCurrentCategory,
 	conbineCategoryLists,
+	setShowAndLikeCategoryList,
 };
 export default categorySlice.reducer;
