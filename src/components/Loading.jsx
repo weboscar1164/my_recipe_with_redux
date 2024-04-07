@@ -9,7 +9,13 @@ const Wrapper = styled.section`
 	height: 100%;
 	position: absolute;
 	background-color: rgba(255, 255, 255, 0.7);
-	display: ${(props) => (props.status === "active" ? "flex" : "none")};
+	&[data-status="active"] {
+		display: flex;
+	}
+
+	&[data-status="inActive"] {
+		display: none;
+	}
 `;
 
 const Loading = () => {
@@ -29,7 +35,7 @@ const Loading = () => {
 	}, [rankingLoadingStatus]);
 	return (
 		// <Wrapper data-status="active">
-		<Wrapper status={loadingStatus ? "active" : "inActive"}>
+		<Wrapper data-status={loadingStatus ? "active" : "inActive"}>
 			<h2>Loading!</h2>
 		</Wrapper>
 	);
