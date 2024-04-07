@@ -15,10 +15,13 @@ const Wrapper = styled.section`
 const Loading = () => {
 	const [loadingStatus, setLoadingStatus] = useState(false);
 	const rankingLoadingStatus = useSelector((state) => state.ranking.status);
+	const categoryLoadingStatus = useSelector((state) => state.category.status);
 
 	useEffect(() => {
-		console.log(rankingLoadingStatus);
-		if (rankingLoadingStatus === "Loading") {
+		if (
+			rankingLoadingStatus === "Loading" ||
+			categoryLoadingStatus === "Loading"
+		) {
 			setLoadingStatus(true);
 		} else {
 			setLoadingStatus(false);

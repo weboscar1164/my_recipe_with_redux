@@ -183,7 +183,7 @@ const categorySlice = createSlice({
 			state.allCategory = action.payload;
 		});
 		builder.addCase(fetchCategorys.rejected, (state) => {
-			state.status = "error";
+			state.status = "Error";
 		});
 	},
 });
