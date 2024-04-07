@@ -30,11 +30,11 @@ const rankingSlice = createSlice({
 		});
 		builder.addCase(fetchRanking.fulfilled, (state, action) => {
 			state.status = "Loaded";
-			console.log(action.payload);
+			// console.log(action.payload);
 			state.rankingList = action.payload;
 		});
 		builder.addCase(fetchRanking.rejected, (state) => {
-			state.status = "error";
+			state.status = "Error";
 		});
 	},
 });
