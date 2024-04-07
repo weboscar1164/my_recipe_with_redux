@@ -6,11 +6,12 @@ import {
 	setShowCategoryList,
 } from "../../store/modules/category";
 import { clearRankingList } from "../../store/modules/ranking";
-import { getCategoryLikeList } from "../../store/modules/like";
+import { getFirebaseCategoryLikeList } from "../../store/modules/like";
 import SearchBar from "../SearchBar";
 import LikeCategoryList from "./LikeCategoryList";
 import RankingList from "../RankingList";
 import { useNavigate } from "react-router-dom";
+
 const Likes = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -23,12 +24,11 @@ const Likes = () => {
 		dispatch(clearSearchWord());
 		dispatch(clearCurrentCategory());
 		dispatch(clearRankingList());
-		dispatch(clearShowCategoryList());
 	}, []);
 
 	useEffect(() => {
 		if (currentUser) {
-			dispatch(getCategoryLikeList(currentUser));
+			dispatch(getFirebaseCategoryLikeList(currentUser));
 		}
 	}, [currentUser]);
 

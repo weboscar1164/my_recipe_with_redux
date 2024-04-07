@@ -9,8 +9,9 @@ const categorySlice = createSlice({
 		status: "",
 		showCategoryList: {},
 		showAndLikeCategoryList: {},
+		likeCategoryList: {},
+		likeAndShowCategoryList: {},
 		currentCategory: { rankingNumber: "" },
-		showAndLikeCategoryList: {},
 	},
 	reducers: {
 		// CategoryList
@@ -49,7 +50,7 @@ const categorySlice = createSlice({
 		conbineCategoryLists(state, action) {
 			console.log(action.payload);
 			const targetList = action.payload.showCategoryList;
-			const conbineList = action.payload.categoryLikeList;
+			const conbineList = action.payload.firebaseCategoryLikeList;
 			const getIsCategoryLike = (category, categoryType, conbineList) => {
 				const foundObject = conbineList.find(
 					(obj) =>
@@ -74,14 +75,16 @@ const categorySlice = createSlice({
 			console.log(current(state.showAndLikeCategoryList));
 		},
 
-		clearShowCategoryList(state) {
+		clearShowAndLikeCategoryList(state) {
+			state.currentCategory = { rankingNumber: "" };
 			state.showCategoryList = {};
+			state.showAndLikeCategoryList = {};
 		},
 
 		// LikeCategoryList
-		setShowAndLikeCategoryList(state, action) {
+		setLikeCategoryList(state, action) {
 			// allCategoryからfirebaseのlikelistを用いて一致するカテゴリを抽出
-			console.log("setShowAndLikeCategoryList.action:", action.payload);
+			console.log("setLikeCategoryList.action:", action.payload);
 			const likedCategoryList = {};
 			Object.keys(state.allCategory).forEach((categoryType) => {
 				likedCategoryList[categoryType] = state.allCategory[categoryType]
@@ -107,7 +110,28 @@ const categorySlice = createSlice({
 						};
 					});
 			});
-			state.showAndLikeCategoryList = likedCategoryList;
+			state.likeCategoryList = likedCategoryList;
+		},
+
+		setLikeAndShowCategoryList(state, action) {
+			const likeCategoryList = state.likeCategoryList;
+			const serchWord = action.payload;
+
+			console.log(action.payload);
+			if (!serchWord) {
+				state.likeAndShowCategoryList = likeCategoryList;
+			} else {
+				const resultCategory = {};
+
+				Object.keys(likeCategoryList).forEach((categoryType) => {
+					resultCategory[categoryType] = likeCategoryList[categoryType].filter(
+						(category) => {
+							return new RegExp(action.payload).test(category.categoryName);
+						}
+					);
+				});
+				state.likeAndShowCategoryList = resultCategory;
+			}
 		},
 
 		// CategoryList, LikeCategoryList共通
@@ -174,20 +198,24 @@ const fetchCategorys = createAsyncThunk("api/getApiData", async () => {
 
 const {
 	setShowCategoryList,
-	clearShowCategoryList,
+	clearShowAndLikeCategoryList,
 	setCurrentCategory,
 	clearCurrentCategory,
 	conbineCategoryLists,
+	setLikeCategoryList,
 	setShowAndLikeCategoryList,
+	setLikeAndShowCategoryList,
 } = categorySlice.actions;
 
 export {
 	fetchCategorys,
 	setShowCategoryList,
-	clearShowCategoryList,
+	clearShowAndLikeCategoryList,
 	setCurrentCategory,
 	clearCurrentCategory,
 	conbineCategoryLists,
+	setLikeCategoryList,
 	setShowAndLikeCategoryList,
+	setLikeAndShowCategoryList,
 };
 export default categorySlice.reducer;

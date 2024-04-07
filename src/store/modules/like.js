@@ -15,30 +15,30 @@ import {
 const likeSlice = createSlice({
 	name: "likes",
 	initialState: {
-		categoryLikeList: [],
+		firebaseCategoryLikeList: [],
 		status: "idle",
 	},
 	reducers: {
 		clearLikeList(state) {
-			state.categoryLikeList = [];
+			state.firebaseCategoryLikeList = [];
 		},
 	},
 	extraReducers: (builder) => {
-		//getCategoryLikeList
-		builder.addCase(getCategoryLikeList.fulfilled, (state, action) => {
+		//getFirebaseCategoryLikeList
+		builder.addCase(getFirebaseCategoryLikeList.fulfilled, (state, action) => {
 			state.status = "Loaded!";
-			state.categoryLikeList = [...action.payload];
-			console.log(state.categoryLikeList);
+			state.firebaseCategoryLikeList = [...action.payload];
+			console.log(state.firebaseCategoryLikeList);
 		});
-		builder.addCase(getCategoryLikeList.rejected, (state) => {
+		builder.addCase(getFirebaseCategoryLikeList.rejected, (state) => {
 			state.status = "error!!";
 		});
 
 		// addCategoryLike
 		builder.addCase(addCategoryLike.fulfilled, (state, action) => {
-			// console.log(current(state.categoryLikeList));
+			// console.log(current(state.firebaseCategoryLikeList));
 			// console.log(action.payload);
-			state.categoryLikeList.push(action.payload);
+			state.firebaseCategoryLikeList.push(action.payload);
 		});
 		builder.addCase(addCategoryLike.rejected, (state) => {
 			state.status = "error!!";
@@ -48,9 +48,9 @@ const likeSlice = createSlice({
 
 		// removeCategoryLike
 		builder.addCase(removeCategoryLike.fulfilled, (state, action) => {
-			console.log(current(state.categoryLikeList));
+			console.log(current(state.firebaseCategoryLikeList));
 			console.log(action.payload.firebaseId);
-			state.categoryLikeList = state.categoryLikeList.filter(
+			state.firebaseCategoryLikeList = state.firebaseCategoryLikeList.filter(
 				(item) => item.id !== action.payload.firebaseId
 			);
 		});
@@ -61,7 +61,7 @@ const likeSlice = createSlice({
 	},
 });
 
-const getCategoryLikeList = createAsyncThunk(
+const getFirebaseCategoryLikeList = createAsyncThunk(
 	"fireBase/getLike",
 	async (payload) => {
 		try {
@@ -137,7 +137,7 @@ const { clearLikeList } = likeSlice.actions;
 
 export {
 	clearLikeList,
-	getCategoryLikeList,
+	getFirebaseCategoryLikeList,
 	addCategoryLike,
 	removeCategoryLike,
 };

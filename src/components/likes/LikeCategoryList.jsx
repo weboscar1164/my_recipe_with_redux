@@ -3,26 +3,41 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import {
 	setCurrentCategory,
-	setShowAndLikeCategoryList,
+	setLikeAndShowCategoryList,
+	setLikeCategoryList,
 } from "../../store/modules/category";
 import {
-	getCategoryLikeList,
+	getFirebaseCategoryLikeList,
 	removeCategoryLike,
 } from "../../store/modules/like";
 import { clearSearchWord } from "../../store/modules/formData";
+import { isEmpty } from "../../utils/helpers";
 
 const LikeCategoryList = () => {
 	const dispatch = useDispatch();
 	const currentUser = useSelector((state) => state.user.currentUser);
-	const categoryLikeList = useSelector((state) => state.like.categoryLikeList);
-	const showAndLikeCategoryList = useSelector(
-		(state) => state.category.showAndLikeCategoryList
+	const firebaseCategoryLikeList = useSelector(
+		(state) => state.like.firebaseCategoryLikeList
 	);
+	const likeCategoryList = useSelector(
+		(state) => state.category.likeCategoryList
+	);
+	const likeAndShowCategoryList = useSelector(
+		(state) => state.category.likeAndShowCategoryList
+	);
+	const serchWord = useSelector((state) => state.formData.searchWord);
 	useEffect(() => {
-		// dispatch(getCategoryLikeList(currentUser));
-		dispatch(setShowAndLikeCategoryList(categoryLikeList));
-		// console.log("showAndLikeCategoryList: ", showAndLikeCategoryList);
-	}, [categoryLikeList]);
+		// dispatch(getFirebaseCategoryLikeList(currentUser));
+		dispatch(setLikeCategoryList(firebaseCategoryLikeList));
+		console.log("likeCategoryList: ", likeCategoryList);
+	}, [firebaseCategoryLikeList]);
+
+	useEffect(() => {
+		if (!isEmpty(likeCategoryList)) {
+			dispatch(setLikeAndShowCategoryList(serchWord));
+		}
+		console.log("likeAndShowCategoryList: ", likeAndShowCategoryList);
+	}, [likeCategoryList, serchWord]);
 
 	const onCategoryClikHandler = (category, categoryType) => {
 		dispatch(setCurrentCategory({ category, categoryType }));
@@ -34,33 +49,37 @@ const LikeCategoryList = () => {
 	};
 
 	return (
-		<div>
-			<ul>
-				{Object.keys(showAndLikeCategoryList).map((categoryType) => {
-					return showAndLikeCategoryList[categoryType].map((category) => {
-						return (
-							<li
-								key={category.categoryId}
-								onClick={() => {
-									onCategoryClikHandler(category, categoryType);
-								}}
-							>
-								<span>{category.categoryName}</span>
-								<i
-									onClick={(e) => {
-										e.stopPropagation();
-										onDeleteClickHandler(category);
-									}}
-								>
-									✘
-								</i>
-								<span></span>
-							</li>
-						);
-					});
-				})}
-			</ul>
-		</div>
+		<>
+			{!isEmpty(likeAndShowCategoryList) && (
+				<div>
+					<ul>
+						{Object.keys(likeAndShowCategoryList).map((categoryType) => {
+							return likeAndShowCategoryList[categoryType].map((category) => {
+								return (
+									<li
+										key={category.categoryId}
+										onClick={() => {
+											onCategoryClikHandler(category, categoryType);
+										}}
+									>
+										<span>{category.categoryName}</span>
+										<i
+											onClick={(e) => {
+												e.stopPropagation();
+												onDeleteClickHandler(category);
+											}}
+										>
+											✘
+										</i>
+										<span></span>
+									</li>
+								);
+							});
+						})}
+					</ul>
+				</div>
+			)}
+		</>
 	);
 };
 

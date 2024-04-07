@@ -19,15 +19,11 @@ const CategoryList = () => {
 	);
 	const searchWord = useSelector((state) => state.formData.searchWord);
 	const currentUser = useSelector((state) => state.user.currentUser);
-	const categoryLikeList = useSelector((state) => state.like.categoryLikeList);
+	const firebaseCategoryLikeList = useSelector(
+		(state) => state.like.firebaseCategoryLikeList
+	);
 
 	const dispatch = useDispatch();
-
-	// useEffect(() => {
-	// 	if (currentUser) {
-	// 		dispatch(getCategoryLikeList(currentUser));
-	// 	}
-	// }, [currentUser]);
 
 	useEffect(() => {
 		if (searchWord) {
@@ -37,9 +33,11 @@ const CategoryList = () => {
 
 	useEffect(() => {
 		console.log(showCategoryList);
-		dispatch(conbineCategoryLists({ showCategoryList, categoryLikeList }));
+		dispatch(
+			conbineCategoryLists({ showCategoryList, firebaseCategoryLikeList })
+		);
 		console.log("conbined", showAndLikeCategoryList);
-	}, [showCategoryList, categoryLikeList]);
+	}, [showCategoryList, firebaseCategoryLikeList]);
 
 	const onCategoryClikHandler = (category, categoryType) => {
 		dispatch(setCurrentCategory({ category, categoryType }));

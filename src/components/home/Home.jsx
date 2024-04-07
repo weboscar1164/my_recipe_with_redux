@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { clearSearchWord } from "../../store/modules/formData";
-import { clearCurrentCategory } from "../../store/modules/category";
+import {
+	clearCurrentCategory,
+	clearShowAndLikeCategoryList,
+} from "../../store/modules/category";
 import { clearRankingList } from "../../store/modules/ranking";
-import { getCategoryLikeList } from "../../store/modules/like";
+import { getFirebaseCategoryLikeList } from "../../store/modules/like";
 import SearchBar from "../SearchBar";
 import CategoryList from "./CategoryList";
 import RankingList from "../RankingList";
@@ -16,13 +19,13 @@ const Home = () => {
 
 	useEffect(() => {
 		dispatch(clearSearchWord());
-		dispatch(clearCurrentCategory());
+		dispatch(clearShowAndLikeCategoryList());
 		dispatch(clearRankingList());
 	}, []);
 
 	useEffect(() => {
 		if (currentUser) {
-			dispatch(getCategoryLikeList(currentUser));
+			dispatch(getFirebaseCategoryLikeList(currentUser));
 		}
 	}, [currentUser]);
 
