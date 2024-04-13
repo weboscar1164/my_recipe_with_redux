@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchRanking } from "../store/modules/ranking";
 import { isEmpty } from "../utils/helpers";
 
 const RankingList = () => {
+	const [isLoading, setIsLoading] = useState(true);
 	const rankingList = useSelector((state) => state.ranking.rankingList);
 	const currentCategory = useSelector(
 		(state) => state.category.currentCategory
@@ -11,8 +12,10 @@ const RankingList = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
+		setIsLoading(true);
 		if (currentCategory.rankingNumber) {
 			dispatch(fetchRanking(currentCategory.rankingNumber));
+			setIsLoading(false);
 		}
 	}, [currentCategory.rankingNumber]);
 

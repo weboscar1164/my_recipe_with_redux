@@ -5,7 +5,7 @@ import {
 	clearCurrentCategory,
 	clearShowAndLikeCategoryList,
 } from "../../store/modules/category";
-import { clearRankingList } from "../../store/modules/ranking";
+import { clearRankingList, fetchRanking } from "../../store/modules/ranking";
 import { getFirebaseCategoryLikeList } from "../../store/modules/like";
 import SearchBar from "../SearchBar";
 import CategoryList from "./CategoryList";
@@ -15,6 +15,7 @@ const Home = () => {
 	const currentCategory = useSelector(
 		(state) => state.category.currentCategory
 	);
+	const rankingStatus = useSelector((state) => state.ranking.status);
 	const currentUser = useSelector((state) => state.user.currentUser);
 
 	useEffect(() => {

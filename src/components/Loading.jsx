@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const Wrapper = styled.section`
 	justify-content: center;
@@ -16,6 +16,23 @@ const Wrapper = styled.section`
 	&[data-status="inActive"] {
 		display: none;
 	}
+`;
+const fade = keyframes`
+    0% {
+        opacity: 0;
+    }
+
+    50%{
+        opacity: 1;
+    }
+
+    100%{
+        opacity: 0;
+    }
+`;
+const Icon = styled.div`
+	font-size: 0.5em;
+	animation: ${fade} 1s ease-in-out infinite;
 `;
 
 const Loading = () => {
@@ -34,9 +51,8 @@ const Loading = () => {
 		}
 	}, [rankingLoadingStatus]);
 	return (
-		// <Wrapper data-status="active">
 		<Wrapper data-status={loadingStatus ? "active" : "inActive"}>
-			<h2>Loading!</h2>
+			<Icon>laoding…</Icon>
 		</Wrapper>
 	);
 };
